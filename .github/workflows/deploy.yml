@@ -22,8 +22,11 @@ jobs:
           script: |
             set -e
 
-            cd /home/ubuntu/harry_mail_reader || git clone https://github.com/harryselectedjobs/harry_mail_reader.git /home/ubuntu/harry_mail_reader && cd /home/ubuntu/harry_mail_reader
+            if [ ! -d "/home/ubuntu/harry_mail_reader/.git" ]; then
+              git clone https://github.com/harryselectedjobs/harry_mail_reader.git /home/ubuntu/harry_mail_reader
+            fi
 
+            cd /home/ubuntu/harry_mail_reader
             git pull origin main
 
             docker build -t harry_mail_reader .
