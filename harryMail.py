@@ -29,14 +29,7 @@ CRM_SEQUENCE_LEAD_API = os.getenv("CRM_SEQUENCE_LEAD_API")
 # LOGGING
 # =========================
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.FileHandler("mail_watcher.log", encoding="utf-8"),
-        logging.StreamHandler()
-    ]
-)
+
 
 logger = logging.getLogger(__name__)
 

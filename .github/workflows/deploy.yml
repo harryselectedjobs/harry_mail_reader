@@ -1,0 +1,39 @@
+name: Deploy Harry Mail Reader
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+
+            cd /home/ubuntu/harry_mail_reader || git clone https://github.com/harryselectedjobs/harry_mail_reader.git /home/ubuntu/harry_mail_reader && cd /home/ubuntu/harry_mail_reader
+
+            git pull origin main
+
+            docker build -t harry_mail_reader .
+
+            docker stop harry_mail_reader 2>/dev/null || true
+            docker rm harry_mail_reader 2>/dev/null || true
+
+            docker run -d \
+              --name harry_mail_reader \
+              --restart unless-stopped \
+              --env-file /home/ubuntu/harry_mail_reader/.env \
+              -v /home/ubuntu/harry_mail_reader/tokens.json:/app/tokens.json \
+              harry_mail_reader
