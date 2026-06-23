@@ -1,0 +1,4 @@
+.venv
+.env
+mail_watcher.logs
+tokens.json

@@ -1,0 +1,32 @@
+2026-06-23 14:06:25,463 [INFO] Mail watcher started
+2026-06-23 14:06:25,464 [INFO] Checking mailbox every 8 seconds
+2026-06-23 14:06:25,771 [INFO] Token expired. Refreshing access token.
+2026-06-23 14:06:26,552 [INFO] Access token refreshed successfully
+2026-06-23 14:06:28,522 [INFO] New email received from hello@jedimarketing.co.uk
+2026-06-23 14:06:30,533 [INFO] Email existence check for hello@jedimarketing.co.uk: False
+2026-06-23 14:06:30,536 [INFO] Email not found in system. Ignoring hello@jedimarketing.co.uk
+2026-06-23 14:06:30,536 [INFO] New email received from cheltenham@Jockeyclubemail.co.uk
+2026-06-23 14:06:32,378 [INFO] Email existence check for cheltenham@Jockeyclubemail.co.uk: False
+2026-06-23 14:06:32,380 [INFO] Email not found in system. Ignoring cheltenham@Jockeyclubemail.co.uk
+2026-06-23 14:06:32,380 [INFO] New email received from info@getyourratesright.com
+2026-06-23 14:06:34,221 [INFO] Email existence check for info@getyourratesright.com: False
+2026-06-23 14:06:34,224 [INFO] Email not found in system. Ignoring info@getyourratesright.com
+2026-06-23 14:06:34,224 [INFO] New email received from email@m.luxuryescapes.com
+2026-06-23 14:06:36,064 [INFO] Email existence check for email@m.luxuryescapes.com: False
+2026-06-23 14:06:36,068 [INFO] Email not found in system. Ignoring email@m.luxuryescapes.com
+2026-06-23 14:06:36,068 [INFO] New email received from dreamcars@mail.botb.com
+2026-06-23 14:06:37,905 [INFO] Email existence check for dreamcars@mail.botb.com: False
+2026-06-23 14:06:37,907 [INFO] Email not found in system. Ignoring dreamcars@mail.botb.com
+2026-06-23 14:06:37,907 [INFO] New email received from Gareth@storiesflooring.co.uk
+2026-06-23 14:06:39,750 [INFO] Email existence check for Gareth@storiesflooring.co.uk: False
+2026-06-23 14:06:39,752 [INFO] Email not found in system. Ignoring Gareth@storiesflooring.co.uk
+2026-06-23 14:06:39,752 [INFO] New email received from Crawley.GatwickAport@regus.com
+2026-06-23 14:06:41,594 [INFO] Email existence check for Crawley.GatwickAport@regus.com: False
+2026-06-23 14:06:41,597 [INFO] Email not found in system. Ignoring Crawley.GatwickAport@regus.com
+2026-06-23 14:06:41,597 [INFO] New email received from stephen.roberts@e.golfgrowthgroup.com
+2026-06-23 14:06:43,436 [INFO] Email existence check for stephen.roberts@e.golfgrowthgroup.com: False
+2026-06-23 14:06:43,440 [INFO] Email not found in system. Ignoring stephen.roberts@e.golfgrowthgroup.com
+2026-06-23 14:06:43,440 [INFO] New email received from news@em.jomalone.co.uk
+2026-06-23 14:06:45,483 [INFO] Email existence check for news@em.jomalone.co.uk: False
+2026-06-23 14:06:45,485 [INFO] Email not found in system. Ignoring news@em.jomalone.co.uk
+2026-06-23 14:06:45,485 [INFO] New email received from KamenMatthews@tc-group.net
