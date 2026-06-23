@@ -30,7 +30,6 @@ CRM_SEQUENCE_LEAD_API = os.getenv("CRM_SEQUENCE_LEAD_API")
 # =========================
 
 
-
 logger = logging.getLogger(__name__)
 
 seen_email_ids = set()
