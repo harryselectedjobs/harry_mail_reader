@@ -28,6 +28,14 @@ CRM_SEQUENCE_LEAD_API = os.getenv("CRM_SEQUENCE_LEAD_API")
 # =========================
 # LOGGING
 # =========================
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
+
 
 
 logger = logging.getLogger(__name__)
@@ -326,4 +334,5 @@ def run():
 
 
 if __name__ == "__main__":
+    print("==================================================================")
     run()
