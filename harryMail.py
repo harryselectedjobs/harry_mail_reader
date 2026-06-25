@@ -36,8 +36,6 @@ logging.basicConfig(
     ]
 )
 
-
-
 logger = logging.getLogger(__name__)
 
 seen_email_ids = set()
@@ -91,7 +89,8 @@ def refresh_access_token():
 
 def fetch_latest_emails(access_token):
     headers = {
-        "Authorization": f"Bearer {access_token}"
+        "Authorization": f"Bearer {access_token}",
+        "Prefer": 'outlook.body-content-type="text"'  # ← plain text body
     }
 
     url = "https://graph.microsoft.com/v1.0/me/messages"
@@ -109,7 +108,7 @@ def fetch_latest_emails(access_token):
             "from,"
             "receivedDateTime,"
             "isRead,"
-            "bodyPreview"
+            "body"          # ← full body instead of bodyPreview
         ),
         "$filter": f"receivedDateTime ge {since}"
     }
@@ -127,7 +126,8 @@ def fetch_latest_emails(access_token):
         access_token = refresh_access_token()
 
         headers = {
-            "Authorization": f"Bearer {access_token}"
+            "Authorization": f"Bearer {access_token}",
+            "Prefer": 'outlook.body-content-type="text"'  # ← keep header on retry
         }
 
         response = requests.get(
@@ -260,11 +260,9 @@ def process_new_email(email):
         "sender_email": sender_email,
         "receiver_email": receiver_email,
         "subject": email.get("subject", ""),
-        "body": email.get("bodyPreview", ""),
+        "body": email.get("body", {}).get("content", ""),  # ← full plain text body
         "direction": "inbound",
-        "sent_at": email.get(
-            "receivedDateTime", ""
-        )
+        "sent_at": email.get("receivedDateTime", "")
     }
 
     logger.info(
