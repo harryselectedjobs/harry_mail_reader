@@ -40,6 +40,71 @@ logger = logging.getLogger(__name__)
 
 seen_email_ids = set()
 
+# =========================
+# AUTO-REPLY DETECTION
+# =========================
+
+# Language-agnostic protocol-level markers. Most autoresponders
+# (Outlook OOF, generic mail servers) set these headers regardless
+# of the language the subject/body is written in.
+AUTO_SUBMITTED_VALUES = {"auto-replied", "auto-generated", "auto-notified"}
+
+# Fallback subject prefixes, used only if headers are missing/unreliable.
+# Covers common "automatic reply" phrasing across several languages.
+AUTO_REPLY_SUBJECT_PREFIXES = [
+    "automatic reply",
+    "auto reply",
+    "auto-reply",
+    "out of office",
+    "ooo:",
+    "afwezigheidsassistent",   # Dutch
+    "automatisch antwoord",    # Dutch
+    "automatische antwort",    # German
+    "abwesenheitsnotiz",       # German
+    "réponse automatique",     # French
+    "absence du bureau",       # French
+    "respuesta automática",    # Spanish
+    "fuera de la oficina",     # Spanish
+    "risposta automatica",     # Italian
+    "自動応答",                  # Japanese
+    "自動返信",                  # Japanese
+    "不在通知",                  # Japanese
+    "自动回复",                  # Chinese (simplified)
+    "自動回覆",                  # Chinese (traditional)
+    "자동 응답",                 # Korean
+]
+
+
+def is_auto_reply(email: dict) -> bool:
+    """
+    Detect autoresponder/out-of-office emails using header signals first
+    (language-independent), falling back to a multilingual subject check.
+    """
+    headers = email.get("internetMessageHeaders") or []
+
+    header_map = {}
+    for h in headers:
+        name = (h.get("name") or "").strip().lower()
+        value = (h.get("value") or "").strip()
+        header_map[name] = value
+
+    auto_submitted = header_map.get("auto-submitted", "").lower()
+    if any(v in auto_submitted for v in AUTO_SUBMITTED_VALUES):
+        return True
+
+    if "x-auto-response-suppress" in header_map:
+        # Presence of this header (commonly "OOF", "All", "DR, RN, NRN, OOF")
+        # is set almost exclusively by autoresponders.
+        return True
+
+    # Fallback: subject-based check (multilingual)
+    subject = (email.get("subject") or "").strip().lower()
+    for prefix in AUTO_REPLY_SUBJECT_PREFIXES:
+        if subject.startswith(prefix):
+            return True
+
+    return False
+
 
 def load_tokens():
     with open(TOKENS_FILE, "r") as f:
@@ -108,7 +173,8 @@ def fetch_latest_emails(access_token):
             "from,"
             "receivedDateTime,"
             "isRead,"
-            "body"          # ← full body instead of bodyPreview
+            "body,"                    # ← full body instead of bodyPreview
+            "internetMessageHeaders"   # ← needed to detect auto-replies (Auto-Submitted, X-Auto-Response-Suppress)
         ),
         "$filter": f"receivedDateTime ge {since}"
     }
@@ -253,6 +319,13 @@ def process_new_email(email):
         .get("emailAddress", {})
         .get("address", "")
     )
+
+    if is_auto_reply(email):
+        logger.info(
+            f"Skipping auto-reply/out-of-office email from "
+            f"{sender_email} (subject: {email.get('subject', '')})"
+        )
+        return
 
     receiver_email = "harry@selected.jobs"
 
